@@ -123,7 +123,7 @@ export const actions: ActionTree<AdyenState, any> = {
     //   customer_id = rootState.user.current.id
     // }
 
-    const baseUrl = `${SideRequest(config.api, 'url')}ext/payment-adyen/`
+    const baseUrl = `http://localhost:8080/api/ext/payment-adyen/`
 
     try {
       const { storeCode } = currentStoreView()

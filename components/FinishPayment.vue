@@ -123,13 +123,13 @@ export default {
               this.renderThreeDS2Challenge(result.token);
               break;
             case 'RedirectShopper':
-              const self = this
-              const { storeCode } = currentStoreView()
-              const testsmth = this.adyenCheckoutInstance.createFromAction({
+              const cartId = this.$store.getters['cart/getCartToken']
+              this.adyenCheckoutInstance.createFromAction({
                 ...result.action,
                 data: {
                   ...result.action.data,
-                  'TermUrl': `${config.server.baseUrl.endsWith('/') ? config.server.baseUrl : (config.server.baseUrl + '/')}${storeCode}/finalize-3ds1`
+                  // 'TermUrl': `${config.api.url.endsWith('/') ? config.api.url : (config.api.url + '/')}api/ext/payment-adyen/finalize-3ds1`
+                  'TermUrl': `http://localhost:8080/api/ext/payment-adyen/finalize-3ds1?storeCode=eu&quoteId=${cartId}`
                 }
               }).mount('#redirectTo3ds1')
               break;
