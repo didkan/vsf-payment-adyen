@@ -131,8 +131,7 @@ export default {
                 ...result.action,
                 data: {
                   ...result.action.data,
-                  // 'TermUrl': `${config.server.baseUrl.endsWith('/') ? config.server.baseUrl : (config.server.baseUrl + '/')}${storeCode}/finalize-3ds1`
-                  'TermUrl': `http://localhost:8080/api/ext/payment-adyen/finalize-3ds1?storeCode=${storeCode}&quoteId=${cartId}${userToken ? ('&token='+userToken) : ''}`
+                  'TermUrl': `${config.server.api.endsWith('/') ? config.server.api : (config.server.api + '/')}ext/payment-adyen/finalize-3ds1?storeCode=${storeCode}&quoteId=${cartId}${userToken ? ('&token='+userToken) : ''}`
                 }
               }).mount('#redirectTo3ds1')
               break;
