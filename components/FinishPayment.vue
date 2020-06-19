@@ -125,11 +125,14 @@ export default {
             case 'RedirectShopper':
               const self = this
               const { storeCode } = currentStoreView()
+              const cartId = this.$store.getters['cart/getCartToken']
+              const userToken = this.$store.getters['user/getUserToken'] || ''
               const testsmth = this.adyenCheckoutInstance.createFromAction({
                 ...result.action,
                 data: {
                   ...result.action.data,
-                  'TermUrl': `${config.server.baseUrl.endsWith('/') ? config.server.baseUrl : (config.server.baseUrl + '/')}${storeCode}/finalize-3ds1`
+                  // 'TermUrl': `${config.server.baseUrl.endsWith('/') ? config.server.baseUrl : (config.server.baseUrl + '/')}${storeCode}/finalize-3ds1`
+                  'TermUrl': `http://localhost:8080/api/ext/payment-adyen/finalize-3ds1?storeCode=${storeCode}&quoteId=${cartId}${userToken ? ('&token='+userToken) : ''}`
                 }
               }).mount('#redirectTo3ds1')
               break;
