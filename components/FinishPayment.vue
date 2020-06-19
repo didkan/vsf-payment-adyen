@@ -13,6 +13,7 @@
 <script>
 import i18n from '@vue-storefront/i18n';
 import { currentStoreView } from '@vue-storefront/core/lib/multistore';
+import config from 'config'
 
 export default {
   name: 'FinishPayment',
@@ -131,7 +132,7 @@ export default {
                 ...result.action,
                 data: {
                   ...result.action.data,
-                  'TermUrl': `${config.server.api.endsWith('/') ? config.server.api : (config.server.api + '/')}ext/payment-adyen/finalize-3ds1?storeCode=${storeCode}&quoteId=${cartId}${userToken ? ('&token='+userToken) : ''}`
+                  'TermUrl': `${config.api.url.endsWith('/') ? config.api.url : (config.api.url + '/')}ext/payment-adyen/finalize-3ds1?storeCode=${storeCode}&quoteId=${cartId}${userToken ? ('&token='+userToken) : ''}`
                 }
               }).mount('#redirectTo3ds1')
               break;
