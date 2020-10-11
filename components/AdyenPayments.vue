@@ -64,22 +64,22 @@ export default {
 
       const translations = {
         "en-US": {
-          payButton: "Pay Now",
+          payButton: "Continue",
         },
         "es-ES": {
-          payButton: "Pagar",
+          payButton: "Continuar",
         },
         "es-MX": {
-          payButton: "Pagar",
+          payButton: "Continuar",
         },
         "fr-FR": {
-          payButton: "Payer",
+          payButton: "Continuer",
         },
         "de-DE": {
-          payButton: "Zahlen",
+          payButton: "Weitergehen",
         },
         "it-IT": {
-          payButton: "Pagar",
+          payButton: "Continuare",
         },
       };
 
