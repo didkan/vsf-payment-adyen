@@ -34,7 +34,7 @@ export default {
   },
 
   methods: {
-    
+
     async createForm() {
       if (
         this.payment &&
@@ -143,6 +143,10 @@ export default {
                   );
                   this.$emit("providedAdyenData");
                 } else {
+                  self.$store.dispatch(
+                    "payment-adyen/setPublicHash",
+                    null
+                  );
                   self.$store.dispatch("notification/spawnNotification", {
                     type: "error",
                     message: i18n.t("Bad data provided for the card"),
@@ -150,6 +154,11 @@ export default {
                   });
                 }
                 return;
+              } else {
+                self.$store.dispatch(
+                  "payment-adyen/setPublicHash",
+                  null
+                );
               }
 
               this.$store.dispatch("payment-adyen/setCardData", {
