@@ -5,8 +5,7 @@ import Vue from 'vue'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import fetch from 'isomorphic-fetch'
 import config from 'config'
-import { currentStoreView, adjustMultistoreApiUrl } from '@vue-storefront/core/lib/multistore';
-import SideRequest from '@vue-storefront/core/lib/side-request';
+import { currentStoreView, adjustMultistoreApiUrl } from '@vue-storefront/core/lib/multistore'
 
 export const actions: ActionTree<AdyenState, any> = {
   saveCardData ({ commit }, { cardData }) {
@@ -52,7 +51,7 @@ export const actions: ActionTree<AdyenState, any> = {
 
   async loadVault ({ commit, rootGetters }) {
 
-    const baseUrl = `${SideRequest(config.api, 'url')}ext/payment-adyen/`
+    const baseUrl = `${config.api['url']}ext/payment-adyen/`
 
     try {
       let token = ''
@@ -67,7 +66,7 @@ export const actions: ActionTree<AdyenState, any> = {
 
       // filter out stored cards where is_visible is false
       result = result.filter(function(card) {
-        return card.is_visible;
+        return card.is_visible
       })
 
       commit(types.SET_LOADED_CARDS, result)
@@ -84,7 +83,7 @@ export const actions: ActionTree<AdyenState, any> = {
       return
     }
 
-    const baseUrl = `${SideRequest(config.api, 'url')}ext/payment-adyen/`
+    const baseUrl = `${config.api['url']}ext/payment-adyen/`
 
     try {
       const { storeCode } = currentStoreView()
@@ -125,7 +124,7 @@ export const actions: ActionTree<AdyenState, any> = {
   //   //   customer_id = rootState.user.current.id
   //   // }
 
-  //   const baseUrl = `${SideRequest(config.api, 'url')}ext/payment-adyen/`
+  //   const baseUrl = `${config.api['url']}ext/payment-adyen/`
 
   //   try {
   //     const { storeCode } = currentStoreView()
@@ -173,7 +172,7 @@ export const actions: ActionTree<AdyenState, any> = {
       console.error('[Adyen] CartId does not exist')
       return
     }
-    const baseUrl = `${SideRequest(config.api, 'url')}ext/payment-adyen/`
+    const baseUrl = `${config.api['url']}ext/payment-adyen/`
     // const baseUrl = `http://localhost:8080/api/ext/payment-adyen/`
 
     try {
@@ -204,7 +203,7 @@ export const actions: ActionTree<AdyenState, any> = {
     //   customer_id = rootState.user.current.id
     // }
 
-    const baseUrl = `${SideRequest(config.api, 'url')}ext/payment-adyen/`
+    const baseUrl = `${config.api['url']}ext/payment-adyen/`
     // const baseUrl = `http://localhost:8080/api/ext/payment-adyen/`
 
     try {
