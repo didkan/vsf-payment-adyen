@@ -1,7 +1,7 @@
-import { AdyenState, AuthDetails } from '../types/AdyenState';
-import { ActionTree } from 'vuex';
-import * as types from './mutation-types';
-import Vue from 'vue';
+import { AdyenState, AuthDetails } from '../types/AdyenState'
+import { ActionTree } from 'vuex'
+import * as types from './mutation-types'
+import Vue from 'vue'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import fetch from 'isomorphic-fetch'
 import config from 'config'
