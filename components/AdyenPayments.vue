@@ -91,7 +91,7 @@ export default {
         locale: storeView.i18n.defaultLocale,
         translations,
         environment,
-        originKey: originKeys[origin],
+        originKey: originKey,
         paymentMethodsResponse: {
           // There I am setting payment methods
           // For now only scheme === adyen_cc
