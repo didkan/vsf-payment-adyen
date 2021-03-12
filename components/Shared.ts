@@ -1,14 +1,16 @@
+import config from 'config'
+
 export default {
     async mounted() {
         if (!document.getElementById('adyen-secured-fields')) {
           if (typeof window !== 'undefined') {
             try {
-              await this.loadScript(
-                'https://checkoutshopper-live.adyen.com/checkoutshopper/sdk/3.3.0/adyen.js'
-              );
-    
+              const dropInScriptUrl = 'https://checkoutshopper-%ENV%.adyen.com/checkoutshopper/sdk/3.3.0/adyen.js'
+              const scriptUrl = dropInScriptUrl.replace('%ENV%', config.adyen.environment)
+              await this.loadScript(scriptUrl);
+
               this.createForm()
-    
+
             } catch (err) {
               console.info(err, "Couldnt fetch adyen's library");
             }
@@ -17,7 +19,7 @@ export default {
           this.createForm();
         }
       },
-    
+
     methods: {
         /**
          * @description - Dynamicly fetches AdyenCheckout SDK
