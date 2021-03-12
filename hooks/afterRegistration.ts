@@ -1,4 +1,7 @@
-export function afterRegistration({ Vue, store, isServer }) {
+import Vue from 'vue'
+import { isServer } from '@vue-storefront/core/helpers'
+
+export function afterRegistration(store) {
     let correctPaymentMethod = false
     const placeOrder = function () {
         if (correctPaymentMethod) {

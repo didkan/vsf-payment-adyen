@@ -1,15 +1,12 @@
-import { createModule, VueStorefrontModuleConfig } from '@vue-storefront/core/lib/module'
+import { StorefrontModule } from '@vue-storefront/core/lib/modules'
+import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
 import { module } from './store'
 import { afterRegistration } from './hooks/afterRegistration'
-import { beforeRegistration } from './hooks/beforeRegistration'
 
 export const KEY = 'payment-adyen'
 
-const moduleConfig: VueStorefrontModuleConfig = {
-    key: KEY,
-    store: { modules: [{ key: KEY, module }] },
-    beforeRegistration,
-    afterRegistration
+export const PaymentAdyenModule: StorefrontModule = function ({ store }) {
+  StorageManager.init(KEY)
+  store.registerModule(KEY, module)
+  afterRegistration(store)
 }
-
-export const PaymentAdyen = createModule(moduleConfig)

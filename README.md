@@ -59,7 +59,7 @@ set Driver for adyen
   "localForage": {
     "defaultDrivers": {
       ...
-      "adyen": "LOCALSTORAGE"
+      "payment-adyen": "LOCALSTORAGE"
     }
   }
 
