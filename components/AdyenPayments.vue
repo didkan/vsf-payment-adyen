@@ -48,7 +48,7 @@ export default {
       const { originKeys, originKey: configOriginKey, environment } = config.adyen;
       const origin = window.location.origin;
       const originKey = originKeys && originKeys.hasOwnProperty(origin) ? originKeys[origin] : configOriginKey
-      if (originKey) {
+      if (!originKey) {
         console.error("[Adyen] Set origin key in the config!");
       }
 
