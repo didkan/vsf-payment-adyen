@@ -45,9 +45,9 @@ export default {
         this.payment.paymentMethodAdditional = {};
       }
 
-      const { originKeys, originKey: configOriginKey, environment } = this.$store.state.config.adyen;
+      const { originKeys, originKey: configOriginKey, environment } = config.adyen;
       const origin = window.location.origin;
-      const originKey = originKeys.hasOwnProperty(origin) ? originKeys[origin] : configOriginKey
+      const originKey = originKeys && originKeys.hasOwnProperty(origin) ? originKeys[origin] : configOriginKey
       if (originKey) {
         console.error("[Adyen] Set origin key in the config!");
       }
