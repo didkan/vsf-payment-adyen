@@ -71,12 +71,13 @@ In `./src/modules/index.ts`
 
 ```js
 ...
-import { PaymentAdyen } from './payment-adyen';
+import { PaymentAdyenModule } from './payment-adyen';
 
-export const registerModules: VueStorefrontModule[] = [
+export function registerClientModules () {
   ...,
-  PaymentAdyen
-]
+  registerModule(PaymentAdyenModule)
+}
+
 ```
 
 ## Checkout/Payment
