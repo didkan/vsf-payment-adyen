@@ -9,6 +9,7 @@ import { currentStoreView } from "@vue-storefront/core/lib/multistore";
 import collectBrowserInfo from "../adyen-utils/browser";
 import i18n from "@vue-storefront/i18n";
 import Shared from './Shared'
+import config from 'config'
 
 export default {
   name: "AdyenPayments",
@@ -44,9 +45,10 @@ export default {
         this.payment.paymentMethodAdditional = {};
       }
 
-      const { originKeys, environment } = this.$store.state.config.adyen;
+      const { originKeys, originKey: configOriginKey, environment } = this.$store.state.config.adyen;
       const origin = window.location.origin;
-      if (!originKeys[origin]) {
+      const originKey = originKeys.hasOwnProperty(origin) ? originKeys[origin] : configOriginKey
+      if (originKey) {
         console.error("[Adyen] Set origin key in the config!");
       }
 
