@@ -51,7 +51,7 @@ export const actions: ActionTree<AdyenState, any> = {
 
   async loadVault ({ commit, rootGetters }) {
 
-    const baseUrl = `${config.api['url']}/ext/payment-adyen/`
+    const baseUrl = `${config.api['url']}/api/ext/payment-adyen/`
 
     try {
       let token = ''
@@ -83,7 +83,7 @@ export const actions: ActionTree<AdyenState, any> = {
       return
     }
 
-    const baseUrl = `${config.api['url']}/ext/payment-adyen/`
+    const baseUrl = `${config.api['url']}/api/ext/payment-adyen/`
 
     try {
       const { storeCode } = currentStoreView()
@@ -124,7 +124,7 @@ export const actions: ActionTree<AdyenState, any> = {
   //   //   customer_id = rootState.user.current.id
   //   // }
 
-  //   const baseUrl = `${config.api['url']}/ext/payment-adyen/`
+  //   const baseUrl = `${config.api['url']}/api/ext/payment-adyen/`
 
   //   try {
   //     const { storeCode } = currentStoreView()
@@ -172,7 +172,7 @@ export const actions: ActionTree<AdyenState, any> = {
       console.error('[Adyen] CartId does not exist')
       return
     }
-    const baseUrl = `${config.api['url']}/ext/payment-adyen/`
+    const baseUrl = `${config.api['url']}/api/ext/payment-adyen/`
     // const baseUrl = `http://localhost:8080/api/ext/payment-adyen/`
 
     try {
@@ -203,7 +203,7 @@ export const actions: ActionTree<AdyenState, any> = {
     //   customer_id = rootState.user.current.id
     // }
 
-    const baseUrl = `${config.api['url']}/ext/payment-adyen/`
+    const baseUrl = `${config.api['url']}/api/ext/payment-adyen/`
     // const baseUrl = `http://localhost:8080/api/ext/payment-adyen/`
 
     try {
