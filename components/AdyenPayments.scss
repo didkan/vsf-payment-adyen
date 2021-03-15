@@ -1481,6 +1481,11 @@
   .adyen-checkout__dropin :before {
     box-sizing: border-box;
   }
+  .adyen-checkout__payment-methods-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
   .adyen-checkout__payment-methods-list--loading {
     -moz-user-select: none;
     -ms-user-select: none;
