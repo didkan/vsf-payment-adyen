@@ -45,11 +45,11 @@ export default {
         this.payment.paymentMethodAdditional = {};
       }
 
-      const { originKeys, originKey: configOriginKey, environment } = config.adyen;
+      const { originKeys, originKey: singleOriginKey, clientKey, environment } = config.adyen;
       const origin = window.location.origin;
-      const originKey = originKeys && originKeys.hasOwnProperty(origin) ? originKeys[origin] : configOriginKey
-      if (!originKey) {
-        console.error("[Adyen] Set origin key in the config!");
+      const originKey = originKeys && originKeys.hasOwnProperty(origin) ? originKeys[origin] : singleOriginKey
+      if (!originKey && !clientKey) {
+        console.error("[Adyen] Set origin or client key in the config!");
       }
 
       if (
@@ -91,7 +91,7 @@ export default {
         locale: storeView.i18n.defaultLocale,
         translations,
         environment,
-        originKey: originKey,
+        ...(clientKey ? { clientKey: clientKey } : { originKey: originKey }),
         paymentMethodsResponse: {
           // There I am setting payment methods
           // For now only scheme === adyen_cc
