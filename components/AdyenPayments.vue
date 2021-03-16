@@ -132,41 +132,41 @@ export default {
           },
 
           onSelect(state, dropin) {
-            state.props.hasCVC = !state.props.storedPaymentMethodId;
+            state.props.hasCVC = !state.props.storedPaymentMethodId
           },
 
           onSubmit: async (state, dropin) => {
             try {
 
               if (!!state.data.paymentMethod.storedPaymentMethodId) {
-                const cards = self.$store.getters["payment-adyen/cards"];
+                const cards = self.$store.getters["payment-adyen/cards"]
                 const card = cards.find(
                   (card) =>
                     card.id === state.data.paymentMethod.storedPaymentMethodId
-                );
+                )
                 if (card) {
                   self.$store.dispatch(
                     "payment-adyen/setPublicHash",
                     card.public_hash
-                  );
-                  this.$emit("providedAdyenData");
+                  )
+                  this.$emit("providedAdyenData")
                 } else {
                   self.$store.dispatch(
                     "payment-adyen/setPublicHash",
                     null
-                  );
+                  )
                   self.$store.dispatch("notification/spawnNotification", {
                     type: "error",
                     message: i18n.t("Bad data provided for the card"),
                     action1: { label: i18n.t("OK") },
-                  });
+                  })
                 }
-                return;
+                return
               } else {
                 self.$store.dispatch(
                   "payment-adyen/setPublicHash",
                   null
-                );
+                )
               }
 
               this.$store.dispatch("payment-adyen/setCardData", {
@@ -181,14 +181,14 @@ export default {
                   ...collectBrowserInfo(),
                   language: storeView.i18n.defaultLocale,
                   origin: window.location.origin,
-                },
-              });
+                }
+              })
 
-              this.$emit("providedAdyenData");
+              this.$emit("providedAdyenData")
             } catch (err) {
-              console.error(err, "Adyen");
+              console.error(err, "Adyen")
             }
-          },
+          }
         })
         .mount(this.$refs['adyen-payments-dropin'])
     }
