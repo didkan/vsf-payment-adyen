@@ -190,7 +190,7 @@ export default {
             }
           },
         })
-        .mount("#adyen-payments-dropin");
+        .mount(this.$refs['adyen-payments-dropin'])
     }
   }
 }
