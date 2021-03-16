@@ -35,12 +35,14 @@ export default {
   computed: {
     ...mapGetters({
       checkoutShippingDetails: 'checkout/getShippingDetails',
-      paymentMethods: 'payment-adyen/methods'
+      paymentMethods: 'payment-adyen/methods',
+      isLoggedIn: 'user/isLoggedIn'
     }),
-    filteredPaymentMethods () {
-      return this.paymentMethods.filter(
-        (method) => config.adyen.paymentMethods[currentStoreView().storeCode].includes(method.type)
-      )
+    storeView () {
+      return currentStoreView()
+    },
+    showStored () {
+      return this.isLoggedIn && config.adyen.saveCards
     }
   },
   methods: {
@@ -60,10 +62,7 @@ export default {
         console.error("[Adyen] Set origin or client key in the config!")
       }
 
-      if (
-        this.$store.getters["user/isLoggedIn"] &&
-        this.$store.state.config.adyen.saveCards
-      ) {
+      if (this.showStored) {
         await Promise.all([
           this.$store.dispatch("payment-adyen/loadVault"),
           this.$store.dispatch("payment-adyen/loadPaymentMethods", { country: this.checkoutShippingDetails.country }),
@@ -92,104 +91,96 @@ export default {
           payButton: "Continuare",
         },
       }
-
-      const storeView = currentStoreView()
-
       const configuration = {
-        locale: storeView.i18n.defaultLocale,
+        locale: this.storeView.i18n.defaultLocale,
         translations,
         environment,
         ...(clientKey ? { clientKey: clientKey } : { originKey: originKey }),
         paymentMethodsResponse: {
           // There I am setting payment methods
           // For now only scheme === adyen_cc
-          paymentMethods: this.filteredPaymentMethods,
+          paymentMethods: this.paymentMethods,
           ...(
             this.hasStoredCards()
             ? { storedPaymentMethods: this.$store.getters['payment-adyen/cards'] }
             : {}
           )
         },
-      }
-      this.adyenCheckoutInstance = new AdyenCheckout(configuration)
-      const self = this
+        allowPaymentMethods: config.adyen.paymentMethods[this.storeView.storeCode],
+        paymentMethodsConfiguration: {
+          card: {
+            hasHolderName: true,
+            holderNameRequired: true,
+            enableStoreDetails: this.showStored,
+            showStoredPaymentMethods: this.showStored,
+            name: "Credit or debit card",
+            brands: Object.keys(this.cardMaps),
+          }
+        },
+        /*
+        onSelect(state, dropin) {
+          state.props.hasCVC = !state.props.storedPaymentMethodId
+        },
 
-      const showStored =
-        this.$store.getters["user/isLoggedIn"] &&
-        this.$store.state.config.adyen.saveCards
+        onSubmit: async (state, dropin) => {
+          try {
 
-      this.dropin = this.adyenCheckoutInstance
-        .create("dropin", {
-          paymentMethodsConfiguration: {
-            card: {
-              hasHolderName: true,
-              holderNameRequired: true,
-              enableStoreDetails: showStored,
-              showStoredPaymentMethods: showStored,
-              name: "Credit or debit card",
-              brands: Object.keys(self.cardMaps),
-            }
-          },
-
-          onSelect(state, dropin) {
-            state.props.hasCVC = !state.props.storedPaymentMethodId
-          },
-
-          onSubmit: async (state, dropin) => {
-            try {
-
-              if (!!state.data.paymentMethod.storedPaymentMethodId) {
-                const cards = self.$store.getters["payment-adyen/cards"]
-                const card = cards.find(
-                  (card) =>
-                    card.id === state.data.paymentMethod.storedPaymentMethodId
+            if (!!state.data.paymentMethod.storedPaymentMethodId) {
+              const cards = self.$store.getters["payment-adyen/cards"]
+              const card = cards.find(
+                (card) =>
+                  card.id === state.data.paymentMethod.storedPaymentMethodId
+              )
+              if (card) {
+                self.$store.dispatch(
+                  "payment-adyen/setPublicHash",
+                  card.public_hash
                 )
-                if (card) {
-                  self.$store.dispatch(
-                    "payment-adyen/setPublicHash",
-                    card.public_hash
-                  )
-                  this.$emit("providedAdyenData")
-                } else {
-                  self.$store.dispatch(
-                    "payment-adyen/setPublicHash",
-                    null
-                  )
-                  self.$store.dispatch("notification/spawnNotification", {
-                    type: "error",
-                    message: i18n.t("Bad data provided for the card"),
-                    action1: { label: i18n.t("OK") },
-                  })
-                }
-                return
+                this.$emit("providedAdyenData")
               } else {
                 self.$store.dispatch(
                   "payment-adyen/setPublicHash",
                   null
                 )
+                self.$store.dispatch("notification/spawnNotification", {
+                  type: "error",
+                  message: i18n.t("Bad data provided for the card"),
+                  action1: { label: i18n.t("OK") },
+                })
               }
-
-              this.$store.dispatch("payment-adyen/setCardData", {
-                method: state.data.paymentMethod.type,
-                additional_data: {
-                  ...state.data.paymentMethod,
-                  ...(state.data.storePaymentMethod
-                  ? { storePaymentMethod: state.data.storePaymentMethod }
-                  : {})
-                },
-                browserInfo: {
-                  ...collectBrowserInfo(),
-                  language: storeView.i18n.defaultLocale,
-                  origin: window.location.origin,
-                }
-              })
-
-              this.$emit("providedAdyenData")
-            } catch (err) {
-              console.error(err, "Adyen")
+              return
+            } else {
+              self.$store.dispatch(
+                "payment-adyen/setPublicHash",
+                null
+              )
             }
+
+            this.$store.dispatch("payment-adyen/setCardData", {
+              method: state.data.paymentMethod.type,
+              additional_data: {
+                ...state.data.paymentMethod,
+                ...(state.data.storePaymentMethod
+                ? { storePaymentMethod: state.data.storePaymentMethod }
+                : {})
+              },
+              browserInfo: {
+                ...collectBrowserInfo(),
+                language: this.storeView.i18n.defaultLocale,
+                origin: window.location.origin,
+              }
+            })
+
+            this.$emit("providedAdyenData")
+          } catch (err) {
+            console.error(err, "Adyen")
           }
-        })
+        }
+        */
+      }
+      this.adyenCheckoutInstance = new AdyenCheckout(configuration)
+      this.dropin = this.adyenCheckoutInstance
+        .create('dropin')
         .mount(this.$refs['adyen-payments-dropin'])
     }
   }
