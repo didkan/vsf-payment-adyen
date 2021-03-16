@@ -12,6 +12,8 @@ import Shared from './Shared'
 import config from 'config'
 import { mapGetters } from 'vuex'
 
+import '@adyen/adyen-web/dist/adyen.css'
+
 export default {
   name: 'AdyenPayments',
   mixins: [Shared],
@@ -187,4 +189,4 @@ export default {
   }
 }
 </script>
-<style lang="scss" src="./AdyenPayments.scss" />
+<!--<style lang="scss" src="./AdyenPayments.scss" />-->
