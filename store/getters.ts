@@ -4,7 +4,7 @@ import { GetterTree } from 'vuex';
 export const getters: GetterTree<AdyenState, any> = {
 
   methods (state) {
-    return state.paymentMethods.map(payment => ({ type: payment.type, title: payment.title }))
+    return state.paymentMethods // .map(payment => ({ type: payment.type, title: payment.title }))
   },
 
   cards (state) {
