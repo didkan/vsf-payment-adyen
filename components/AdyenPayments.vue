@@ -1,35 +1,35 @@
 <template>
   <div class="adyen-block">
-    <div ref="adyen-payments-dropin"></div>
+    <div ref="adyen-payments-dropin" />
   </div>
 </template>
 
 <script>
-import { currentStoreView } from "@vue-storefront/core/lib/multistore"
-import collectBrowserInfo from "../adyen-utils/browser"
-import i18n from "@vue-storefront/i18n"
+import { currentStoreView } from '@vue-storefront/core/lib/multistore'
+// import collectBrowserInfo from '../adyen-utils/browser'
+// import i18n from '@vue-storefront/i18n'
 import Shared from './Shared'
 import config from 'config'
 import { mapGetters } from 'vuex'
 
 export default {
-  name: "AdyenPayments",
+  name: 'AdyenPayments',
   mixins: [Shared],
-  data() {
+  data () {
     return {
       payment: this.$store.state.checkout.paymentDetails,
       adyenCheckoutInstance: null,
       dropin: null,
       cardMaps: {
-        amex: "AE",
-        discover: "DI",
-        jcb: "JCB",
-        mc: "MC",
-        visa: "VI",
-        maestro: "MI",
-        diners: "DN",
-        unionpay: "CUP",
-      },
+        amex: 'AE',
+        discover: 'DI',
+        jcb: 'JCB',
+        mc: 'MC',
+        visa: 'VI',
+        maestro: 'MI',
+        diners: 'DN',
+        unionpay: 'CUP'
+      }
     }
   },
   computed: {
@@ -46,7 +46,7 @@ export default {
     }
   },
   methods: {
-    async createForm() {
+    async createForm () {
       if (
         this.payment &&
         this.payment.paymentMethodAdditional &&
@@ -59,37 +59,38 @@ export default {
       const origin = window.location.origin
       const originKey = originKeys && originKeys.hasOwnProperty(origin) ? originKeys[origin] : singleOriginKey
       if (!originKey && !clientKey) {
-        console.error("[Adyen] Set origin or client key in the config!")
+        // eslint-disable-next-line no-console
+        console.error('[Adyen] Set origin or client key in the config!')
       }
 
       if (this.showStored) {
         await Promise.all([
-          this.$store.dispatch("payment-adyen/loadVault"),
-          this.$store.dispatch("payment-adyen/loadPaymentMethods", { country: this.checkoutShippingDetails.country }),
+          this.$store.dispatch('payment-adyen/loadVault'),
+          this.$store.dispatch('payment-adyen/loadPaymentMethods', { country: this.checkoutShippingDetails.country })
         ])
       } else {
-        await this.$store.dispatch("payment-adyen/loadPaymentMethods", { country: this.checkoutShippingDetails.country })
+        await this.$store.dispatch('payment-adyen/loadPaymentMethods', { country: this.checkoutShippingDetails.country })
       }
 
       const translations = {
-        "en-US": {
-          payButton: "Continue",
+        'en-US': {
+          payButton: 'Continue'
         },
-        "es-ES": {
-          payButton: "Continuar",
+        'es-ES': {
+          payButton: 'Continuar'
         },
-        "es-MX": {
-          payButton: "Continuar",
+        'es-MX': {
+          payButton: 'Continuar'
         },
-        "fr-FR": {
-          payButton: "Continuer",
+        'fr-FR': {
+          payButton: 'Continuer'
         },
-        "de-DE": {
-          payButton: "Weitergehen",
+        'de-DE': {
+          payButton: 'Weitergehen'
         },
-        "it-IT": {
-          payButton: "Continuare",
-        },
+        'it-IT': {
+          payButton: 'Continuare'
+        }
       }
       const configuration = {
         locale: this.storeView.i18n.defaultLocale,
@@ -102,8 +103,8 @@ export default {
           paymentMethods: this.paymentMethods,
           ...(
             this.hasStoredCards()
-            ? { storedPaymentMethods: this.$store.getters['payment-adyen/cards'] }
-            : {}
+              ? { storedPaymentMethods: this.$store.getters['payment-adyen/cards'] }
+              : {}
           )
         },
         allowPaymentMethods: config.adyen.paymentMethods[this.storeView.storeCode],
@@ -113,10 +114,10 @@ export default {
             holderNameRequired: true,
             enableStoreDetails: this.showStored,
             showStoredPaymentMethods: this.showStored,
-            name: "Credit or debit card",
-            brands: Object.keys(this.cardMaps),
+            name: 'Credit or debit card',
+            brands: Object.keys(this.cardMaps)
           }
-        },
+        }
         /*
         onSelect(state, dropin) {
           state.props.hasCVC = !state.props.storedPaymentMethodId
