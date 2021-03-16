@@ -1,0 +1,9 @@
+{
+  "name": "payment-adyen",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.ts",
+  "dependencies": {
+    "@adyen/adyen-web": "^4.1.0"
+  }
+}
