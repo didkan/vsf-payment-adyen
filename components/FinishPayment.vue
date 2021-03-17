@@ -15,6 +15,7 @@ import config from 'config'
 import i18n from '@vue-storefront/i18n';
 import { currentStoreView } from '@vue-storefront/core/lib/multistore';
 import Shared from './Shared'
+import AdyenCheckout from '@adyen/adyen-web'
 
 export default {
   name: 'FinishPayment',
@@ -122,7 +123,7 @@ export default {
 
     renderThreeDS2DeviceFingerprint(token) {
       const self = this
-      
+
       this.threeDS2IdentifyComponent = this.adyenCheckoutInstance.create(
         'threeDS2DeviceFingerprint',
         {
