@@ -1,6 +1,8 @@
 <template>
   <div class="adyen-block">
-    <div ref="adyen-payments-dropin" />
+    <div class="dropin dropin-gradient">
+      <div ref="adyen-payments-dropin" />
+    </div>
   </div>
 </template>
 
