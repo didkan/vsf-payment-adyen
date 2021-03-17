@@ -1,4 +1,5 @@
 import config from 'config'
+import AdyenCheckout from '@adyen/adyen-web'
 
 export default {
     async mounted() {
