@@ -189,4 +189,4 @@ export default {
   }
 }
 </script>
-<!--<style lang="scss" src="./AdyenPayments.scss" />-->
+<style lang="scss" src="./AdyenPayments.scss" />
