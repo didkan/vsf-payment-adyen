@@ -11,7 +11,7 @@ import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import Shared from './Shared'
 import config from 'config'
 import { mapGetters } from 'vuex'
-
+import AdyenCheckout from '@adyen/adyen-web'
 import '@adyen/adyen-web/dist/adyen.css'
 
 export default {

@@ -2,28 +2,31 @@ import config from 'config'
 
 export default {
     async mounted() {
-        if (!document.getElementById('adyen-secured-fields')) {
-          if (typeof window !== 'undefined') {
-            try {
-              const sdkVersion = config.adyen.sdkVersion || (config.adyen.clientKey ? '4.1.0' : '3.23.0')
-              const scriptUrl = `https://checkoutshopper-${config.adyen.environment}.adyen.com/checkoutshopper/sdk/${sdkVersion}/adyen.js`
-              await this.loadScript(scriptUrl);
+      /*
+      if (!document.getElementById('adyen-secured-fields')) {
+        if (typeof window !== 'undefined') {
+          try {
+            const sdkVersion = config.adyen.sdkVersion || (config.adyen.clientKey ? '4.1.0' : '3.23.0')
+            const scriptUrl = `https://checkoutshopper-${config.adyen.environment}.adyen.com/checkoutshopper/sdk/${sdkVersion}/adyen.js`
+            await this.loadScript(scriptUrl);
 
-              this.createForm()
+            this.createForm()
 
-            } catch (err) {
-              console.info(err, "Couldnt fetch adyen's library");
-            }
+          } catch (err) {
+            console.info(err, "Couldnt fetch adyen's library");
           }
-        } else {
-          this.createForm();
         }
-      },
-
+      } else {
+        this.createForm();
+      }
+      */
+      this.createForm()
+    },
     methods: {
         /**
          * @description - Dynamicly fetches AdyenCheckout SDK
          */
+        /*
         loadScript(src) {
             return new Promise((resolve, reject) => {
                 let script = document.createElement("script");
@@ -34,6 +37,7 @@ export default {
                 document.head.append(script);
             });
         },
+        */
 
         hasStoredCards() {
           const storedPaymentMethods = this.$store.getters["payment-adyen/cards"];
