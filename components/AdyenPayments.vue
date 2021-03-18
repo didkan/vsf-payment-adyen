@@ -8,8 +8,8 @@
 
 <script>
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
-// import collectBrowserInfo from '../adyen-utils/browser'
-// import i18n from '@vue-storefront/i18n'
+import collectBrowserInfo from '../adyen-utils/browser'
+import i18n from '@vue-storefront/i18n'
 import Shared from './Shared'
 import config from 'config'
 import { mapGetters } from 'vuex'
@@ -121,67 +121,82 @@ export default {
             name: 'Credit or debit card',
             brands: Object.keys(this.cardMaps)
           }
-        }
-        /*
-        onSelect(state, dropin) {
+        },
+        onSelect (state, dropin) {
           state.props.hasCVC = !state.props.storedPaymentMethodId
         },
 
         onSubmit: async (state, dropin) => {
-          try {
-
-            if (!!state.data.paymentMethod.storedPaymentMethodId) {
-              const cards = self.$store.getters["payment-adyen/cards"]
-              const card = cards.find(
-                (card) =>
-                  card.id === state.data.paymentMethod.storedPaymentMethodId
-              )
-              if (card) {
-                self.$store.dispatch(
-                  "payment-adyen/setPublicHash",
-                  card.public_hash
+          console.log({ state, dropin })
+          if (state.data.paymentMethod.type === 'dotpay') {
+            const res = await this.$store.dispatch(
+              'payment-adyen/initRedirectPayment',
+              {
+                method: 'adyen_hpp', // state.data.paymentMethod.type ??
+                additional_data: state.data.paymentMethod,
+                shippingDetails: this.checkoutShippingDetails,
+                browserInfo: {
+                  ...collectBrowserInfo(),
+                  language: this.storeView.i18n.defaultLocale,
+                  origin: window.location.origin
+                }
+              }
+            )
+            console.log({ res })
+          } else {
+            try {
+              if (!!state.data.paymentMethod.storedPaymentMethodId) {
+                const cards = this.$store.getters['payment-adyen/cards']
+                const card = cards.find(
+                  (card) =>
+                    card.id === state.data.paymentMethod.storedPaymentMethodId
                 )
-                this.$emit("providedAdyenData")
+                if (card) {
+                  this.$store.dispatch(
+                    'payment-adyen/setPublicHash',
+                    card.public_hash
+                  )
+                  this.$emit('providedAdyenData')
+                } else {
+                  this.$store.dispatch(
+                    'payment-adyen/setPublicHash',
+                    null
+                  )
+                  this.$store.dispatch('notification/spawnNotification', {
+                    type: 'error',
+                    message: i18n.t('Bad data provided for the card'),
+                    action1: { label: i18n.t('OK') }
+                  })
+                }
+                return
               } else {
-                self.$store.dispatch(
-                  "payment-adyen/setPublicHash",
+                this.$store.dispatch(
+                  'payment-adyen/setPublicHash',
                   null
                 )
-                self.$store.dispatch("notification/spawnNotification", {
-                  type: "error",
-                  message: i18n.t("Bad data provided for the card"),
-                  action1: { label: i18n.t("OK") },
-                })
               }
-              return
-            } else {
-              self.$store.dispatch(
-                "payment-adyen/setPublicHash",
-                null
-              )
+
+              this.$store.dispatch('payment-adyen/setCardData', {
+                method: state.data.paymentMethod.type,
+                additional_data: {
+                  ...state.data.paymentMethod,
+                  ...(state.data.storePaymentMethod
+                    ? { storePaymentMethod: state.data.storePaymentMethod }
+                    : {})
+                },
+                browserInfo: {
+                  ...collectBrowserInfo(),
+                  language: this.storeView.i18n.defaultLocale,
+                  origin: window.location.origin
+                }
+              })
+
+              this.$emit('providedAdyenData')
+            } catch (err) {
+              console.error(err, 'Adyen')
             }
-
-            this.$store.dispatch("payment-adyen/setCardData", {
-              method: state.data.paymentMethod.type,
-              additional_data: {
-                ...state.data.paymentMethod,
-                ...(state.data.storePaymentMethod
-                ? { storePaymentMethod: state.data.storePaymentMethod }
-                : {})
-              },
-              browserInfo: {
-                ...collectBrowserInfo(),
-                language: this.storeView.i18n.defaultLocale,
-                origin: window.location.origin,
-              }
-            })
-
-            this.$emit("providedAdyenData")
-          } catch (err) {
-            console.error(err, "Adyen")
           }
         }
-        */
       }
       this.adyenCheckoutInstance = new AdyenCheckout(configuration)
       this.dropin = this.adyenCheckoutInstance
