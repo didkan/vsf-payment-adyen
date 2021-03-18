@@ -108,6 +108,50 @@ export const actions: ActionTree<AdyenState, any> = {
     }
   },
 
+  async initRedirectPayment ({ commit, rootGetters, rootState }, { method, additional_data, shippingDetails, browserInfo, storePaymentMethod = false }) {
+    const cartId = rootGetters['cart/getCartToken']
+    if (!cartId) {
+      console.error('[Adyen] CartId does not exist')
+      return
+    }
+    let token = ''
+    if (rootGetters['user/getUserToken']) {
+      token = `?token=${rootGetters['user/getUserToken']}`
+    }
+
+    // let customer_id = null
+    // if (rootState.user.current && rootState.user.current.id) {
+    //   customer_id = rootState.user.current.id
+    // }
+
+    const baseUrl = `${config.api['url']}/api/ext/payment-adyen/`
+
+    try {
+      const { storeCode } = currentStoreView()
+      let response = await fetch(`${baseUrl}payment-information/${storeCode}/${cartId}${token}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: shippingDetails.emailAddress,
+          paymentMethod: method,
+          additional_data: {
+            ...additional_data,
+            ...browserInfo
+          }
+        })
+      })
+
+      let { result } = await response.json()
+
+      return result
+
+    } catch (err) {
+      console.error('[Adyen Payments]', err)
+    }
+  },
+
   // async initPayment ({ commit, rootGetters, rootState }, { method, additional_data, browserInfo, storePaymentMethod = false }) {
   //   const cartId = rootGetters['cart/getCartToken']
   //   if (!cartId) {
